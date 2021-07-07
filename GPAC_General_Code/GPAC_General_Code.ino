@@ -51,7 +51,7 @@ Servo no_servo;
 long show_time = 0;
 
 //Activation Profiles
-long Activation_Profile_1[2];
+long Activation_Profile_1[2] = {5000, 25000};
 long Activation_Profile_2[2];
 long Activation_Profile_3[2];
 long Activation_Profile_4[2];
@@ -128,18 +128,19 @@ int apple = 0;
 
 //Maybe make a method to do this more cleanly?
 
-//Device ("Motor_1_Direction", "Motor_2_Direction", "Stepper, "Servo"), Servo Object (no_servo or servo_#), Pin_1, Pin_2, Pin_3, Pin_4, Max_Voltage, Zone (default 0), Speed (default 0), Start_Time (default 0), Last_Speed (default 0), Stages[] , Setpoints[], Timings[], Num_Stages, ACTIVE)
+//Device ("Motor_1_Direction", "Motor_2_Direction", "Stepper, "Servo")
+//Servo Object (no_servo or servo_#)
+//Pin_1, Pin_2, Pin_3, Pin_4
+//Max_Voltage,
+//Zone (default 0), Speed (default 0), Start_Time (default 0), Last_Speed (default 0)
+//Stages[] , Setpoints[], Timings[], Num_Stages, ACTIVE)
+
 JOURNEY_CONFIGURATION Journey_1 {"Motor_1_Direction", no_servo, APIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_1_Stages, Profile_1_Setpoints, Profile_1_Timings, false};
 JOURNEY_CONFIGURATION Journey_2 {"Motor_1_Direction", no_servo, BPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_2_Stages, Profile_2_Setpoints, Profile_2_Timings, false};
 JOURNEY_CONFIGURATION Journey_3 {"Motor_1_Direction", no_servo, BPIN2, 0, 0, 0, 12, 0, 0, 0, 0, Profile_3_Stages, Profile_3_Setpoints, Profile_3_Timings, false};
 
 const int Num_Journeys = 3;
 JOURNEY_CONFIGURATION Journeys[Num_Journeys] = {Journey_1, Journey_2, Journey_3};
-
-//////////////////////////////
-//ARRAY FOR ALL PWM JOURNEYS//
-//////////////////////////////
-
 
 void setup() {
 
@@ -170,25 +171,45 @@ void setup() {
   ///////////////////
 
   /////////////////
-  //STARTING SHOW//
+  //SERVO CONTROL//
   /////////////////
 
+  //Attaching Servos
+    for (int J = 0; J < Num_Journeys; J++) {
+    JOURNEY_CONFIGURATION &Journey = Journeys[J];
+    if (Journey.Device == "Servo"){
+      Journey.servo.attach(Journey.PIN1);
+    }
+  }
+
+  //Holding in idle. 
   //Startup();
 
-  Journey_1.Start_Time = millis();
-  Journey_2.Start_Time = millis();
-  Journey_3.Start_Time = millis();
-
+  //Reseting start time.
+  Reset_Start_Time();
+ 
 }
 
-//Startup, Idling Loop
+//Resting Start Times (On Startup)
+void Reset_Start_Time() {
+  //Setting Start Time For All Journeys
+  for (int J = 0; J < Num_Journeys; J++) {
+    JOURNEY_CONFIGURATION &Journey = Journeys[J];
+    Journey.Start_Time = millis();
+  }
+}
+
+//Startup, Idling
 void Startup() {
   while (digitalRead(OPTO_IN) == LOW) {
     //Idling, waiting for synch pulse.
   }
 }
 
-//Main Loop
+/////////////
+//MAIN LOOP//
+/////////////
+
 void loop() {
 
   ///////////////////
