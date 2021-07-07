@@ -120,8 +120,6 @@ struct JOURNEY_CONFIGURATION {
   boolean ACTIVE;
 };
 
-int apple = 0;
-
 /////////////////////////////////////
 //SETTING UP JOURNEY CONFIGURATIONS//
 /////////////////////////////////////
