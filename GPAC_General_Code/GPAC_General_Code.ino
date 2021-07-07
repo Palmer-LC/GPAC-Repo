@@ -6,6 +6,8 @@
 
 //Custom SAMD Servo Library
 #include <Servo.h>
+
+//Accel Stepper Library
 #include <AccelStepper.h>
 
 //Pin Definitions For Output Pins
@@ -192,41 +194,40 @@ void loop() {
   ///////////////////
   //ANIMATION STAGE//
   ///////////////////
-  
-  if (Journeys[0].ACTIVE == false and Journeys[1].ACTIVE == false and Journeys[2].ACTIVE == false){
-  int rando = random(0,3);
-  Journeys[rando].ACTIVE = true;
-  Journeys[rando].Zone = 0;
-  Journeys[rando].Last_Speed = 0;
-  Journeys[rando].Start_Time = long(millis());
-  Serial.println(rando);
+
+  if (Journeys[0].ACTIVE == false and Journeys[1].ACTIVE == false and Journeys[2].ACTIVE == false) {
+    int rando = random(0, 3);
+    Journeys[rando].ACTIVE = true;
+    Journeys[rando].Zone = 0;
+    Journeys[rando].Last_Speed = 0;
+    Journeys[rando].Start_Time = long(millis());
+    Serial.println(rando);
   }
 
 
   for (int J = 0; J < Num_Journeys; J++) {
     JOURNEY_CONFIGURATION &Journey = Journeys[J];
 
-    if (Journey.ACTIVE){
-    
-    long TIME = millis();
-    int zone = Journey.Zone;
-    long elapsed_time = TIME - Journey.Start_Time;
+    if (Journey.ACTIVE) {
 
-    if (Journey.Stages[zone] != "C") {
-``
-}
+      long TIME = millis();
+      int zone = Journey.Zone;
+      long elapsed_time = TIME - Journey.Start_Time;
 
-    if (elapsed_time >= (Journey.Profile_Timings[Journey.Zone] * 1000)) { 
-      next_stage(Journey);
-    }
+      if (Journey.Stages[zone] != "C") {
+      }
 
-    if (Journey.Device == "Servo") {
-      servo_run(Journey);
-    } else if (Journey.Device = "Motor_1_Direction") {
-      motor_run_1_direction(Journey);
+      if (elapsed_time >= (Journey.Profile_Timings[Journey.Zone] * 1000)) {
+        next_stage(Journey);
+      }
+
+      if (Journey.Device == "Servo") {
+        servo_run(Journey);
+      } else if (Journey.Device = "Motor_1_Direction") {
+        motor_run_1_direction(Journey);
+      }
     }
   }
-}
 }
 
 void next_stage(JOURNEY_CONFIGURATION &Journey) {
