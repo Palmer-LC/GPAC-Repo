@@ -236,6 +236,7 @@ void loop() {
       long elapsed_time = TIME - Journey.Start_Time;
 
       if (Journey.Stages[zone] != "C") {
+        Journeys[Journey].Speed = float(Journeys[Journey].Last_Speed) + float(elapsed_time) * float(Journeys[Journey].Profile_Setpoints[Journeys[Journey].Zone] - Journeys[Journey].Last_Speed) / float(1000 * Journeys[Journey].Profile_Timings[Journeys[Journey].Zone]);
       }
 
       if (elapsed_time >= (Journey.Profile_Timings[Journey.Zone] * 1000)) {
