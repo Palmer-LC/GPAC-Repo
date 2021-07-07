@@ -78,24 +78,31 @@ float PWM_resolution = 255;
 //MOTION PROFILES//
 ///////////////////
 
-//Profile 1 (Speed Profile)
+//Profile 1 (Speed Profile) //Horse and Buggy
 String Profile_1_Stages[5] = {"A", "C", "A"};
-float Profile_1_Setpoints[5] = {0.5, 0.5, 0};
-float Profile_1_Timings[5] = {4, 3, 2};
+float Profile_1_Setpoints[5] = {0.3, 0.3, 0};
+float Profile_1_Timings[5] = {4, 12, 2};
 
-//Profile 2 (Speed Profile)
+//Profile 2 (Speed Profile) //Farm Train
 String Profile_2_Stages[5] = {"A", "C", "A"};
-float Profile_2_Setpoints[5] = {0.5, 0.5, 0};
-float Profile_2_Timings[5] = {5, 15, 5};
+float Profile_2_Setpoints[5] = {0.4, 0.4, 0};
+float Profile_2_Timings[5] = {6, 25, 5};
 
-//Profile 3 (Angle Profile)
+//Profile 3 (Angle Profile) //Forklift
 String Profile_3_Stages[3] = {"A", "C", "A"};
 float Profile_3_Setpoints[3] = {90, 90, 0};
 float Profile_3_Timings[3] = {3, 2, 3};
 
+//Profile 4 (Angle Profile) //Grape Stompers
 String Profile_4_Stages[3] = {"A", "C", "A"};
-float Profile_4_Setpoints[3] = {45, 45, 0};
-float Profile_4_Timings[3] = {3, 3, 3};
+float Profile_4_Setpoints[3] = {25, 25, 0};
+float Profile_4_Timings[3] = {1, 1, 1};
+
+
+//Profile 5 (Speed Profile) //Vineyard Fan
+String Profile_5_Stages[1] = {"C"};
+float Profile_5_Setpoints[1] = {0.1};
+float Profile_5_Timings[1] = {0};
 
 ///////////////////////////
 //JOURNEY DATA STRUCTURE///
@@ -117,6 +124,7 @@ struct JOURNEY_CONFIGURATION {
   float *Profile_Setpoints;
   float *Profile_Timings;
   boolean ACTIVE;
+  int Profile_Length;
 };
 
 /////////////////////////////////////
@@ -132,15 +140,15 @@ struct JOURNEY_CONFIGURATION {
 //Zone (default 0), Speed (default 0), Start_Time (default 0), Last_Speed (default 0)
 //Stages[] , Setpoints[], Timings[], Num_Stages, ACTIVE)
 
-JOURNEY_CONFIGURATION Journey_1 {"Motor_1_Direction", no_servo, APIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_1_Stages, Profile_1_Setpoints, Profile_1_Timings, true}; //Horse and Buggy
-JOURNEY_CONFIGURATION Journey_2 {"Motor_1_Direction", no_servo, BPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_2_Stages, Profile_2_Setpoints, Profile_2_Timings, true}; //Farm Train
-JOURNEY_CONFIGURATION Journey_3 {"Servo", servo_1, DPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_3_Stages, Profile_3_Setpoints, Profile_3_Timings, true}; //Forklift
-JOURNEY_CONFIGURATION Journey_4 {"Servo", servo_2, DPIN2, 0, 0, 0, 12, 0, 0, 0, 0, Profile_3_Stages, Profile_4_Setpoints, Profile_4_Timings, true}; //Forklift
+JOURNEY_CONFIGURATION Journey_1 {"Motor_1_Direction", no_servo, APIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_1_Stages, Profile_1_Setpoints, Profile_1_Timings, true,3}; //Horse and Buggy
+JOURNEY_CONFIGURATION Journey_2 {"Motor_1_Direction", no_servo, BPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_2_Stages, Profile_2_Setpoints, Profile_2_Timings, true,3}; //Farm Train
+JOURNEY_CONFIGURATION Journey_3 {"Servo", servo_1, DPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_3_Stages, Profile_3_Setpoints, Profile_3_Timings, true,3}; //Forklift
+JOURNEY_CONFIGURATION Journey_4 {"Servo", servo_2, DPIN2, 0, 0, 0, 12, 0, 0, 0, 0, Profile_3_Stages, Profile_4_Setpoints, Profile_4_Timings, true,3}; //Grape Stompers
+JOURNEY_CONFIGURATION Journey_5 {"Motor_1_Direction", no_servo, CPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_5_Stages, Profile_5_Setpoints, Profile_5_Timings, true,1}; //Fan
 
 
-
-const int Num_Journeys = 4;
-JOURNEY_CONFIGURATION Journeys[Num_Journeys] = {Journey_1, Journey_2,Journey_3,Journey_4};
+const int Num_Journeys = 5;
+JOURNEY_CONFIGURATION Journeys[Num_Journeys] = {Journey_1, Journey_2, Journey_3,Journey_4, Journey_5};
 
 void setup() {
 
@@ -159,6 +167,16 @@ void setup() {
   //Initializing PWM Pins
   pinMode(APIN1, OUTPUT);
   pinMode(APIN2, OUTPUT);
+  digitalWrite(APIN2,LOW);
+
+  pinMode(BPIN1, OUTPUT);
+  pinMode(BPIN2, OUTPUT);
+  digitalWrite(BPIN2,LOW);
+
+
+  pinMode(CPIN1, OUTPUT);
+  pinMode(CPIN2, OUTPUT);
+  digitalWrite(CPIN2,LOW);
 
   //Setting up serial monitor.
   Serial.begin(9600);
@@ -222,12 +240,10 @@ void loop() {
       long elapsed_time = TIME - Journey.Start_Time;
 
       if (Journey.Stages[zone] != "C") {
-        Journey.Speed = float(Journey.Last_Speed) + float(elapsed_time) * float(Journey.Profile_Setpoints[zone] - Journey.Last_Speed) / float(1000 * Journey.Profile_Timings[zone]);
-      }
-
-      if (J == 0) {
-        //Serial.println("Pin: " + String(Journey.PIN1) + " Speed: " + String(Journey.Speed));
-      }
+        Journey.Speed = float(Journey.Last_Speed) + float(elapsed_time) * float(Journey.Profile_Setpoints[zone] - Journey.Last_Speed) / float(1000 * Journey.Profile_Timings[zone]);          
+        } else {
+           Journey.Speed = Journey.Profile_Setpoints[zone];
+        }
 
       if (elapsed_time >= (Journey.Profile_Timings[zone] * 1000)) {
         next_stage(Journey);
@@ -247,7 +263,7 @@ void next_stage(JOURNEY_CONFIGURATION &Journey) {
   Journey.Zone++;
 
   //Restarting
-  if (Journey.Zone == 3) {
+  if (Journey.Zone == Journey.Profile_Length) {
     Journey.Zone = 0;
   }
 
@@ -272,9 +288,11 @@ void motor_run_1_direction(JOURNEY_CONFIGURATION &Journey) {
   float voltage_limit = Journey.Max_Voltage / 12;
 
   float limited_speed_ratio = voltage_limit * Journey.Speed;
-          
-  Serial.println("Pin: " + String(Journey.PIN1) + " Speed: " + String(Journey.Speed));
 
+    if (Journey.PIN1 == APIN1){
+    Serial.println("Pin: " + String(Journey.PIN1) + " Speed: " + String(Journey.Speed) + " Reso: " + String(PWM_resolution*Journey.Speed));
+  }
+          
 
   analogWrite(Journey.PIN1, limited_speed_ratio * PWM_resolution);
 
