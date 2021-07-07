@@ -81,26 +81,17 @@ float PWM_resolution = 255;
 //Profile 1 (Speed Profile)
 String Profile_1_Stages[5] = {"A", "C", "A"};
 float Profile_1_Setpoints[5] = {0.5, 0.5, 0};
-float Profile_1_Timings[5] = {3, 3, 1};
+float Profile_1_Timings[5] = {4, 3, 2};
 
 //Profile 2 (Speed Profile)
 String Profile_2_Stages[5] = {"A", "C", "A"};
 float Profile_2_Setpoints[5] = {0.5, 0.5, 0};
-float Profile_2_Timings[5] = {3, 3, 1};
+float Profile_2_Timings[5] = {5, 15, 5};
 
-//Profile 3
-String Profile_3_Stages[5] = {"A", "C", "A"};
-float Profile_3_Setpoints[5] = {0.5, 0.5, 0};
-float Profile_3_Timings[5] = {3, 3, 1};
-
-//Profile 4 (Angle Profile)
-String Profile_4_Stages[3] = {"A", "C", "A"};
-float Profile_4_Setpoints[3] = {90, 90, 0};
-float Profile_4_Timings[3] = {2, 2, 2};
-
+//Profile 3 (Angle Profile)
 String Profile_5_Stages[3] = {"A", "C", "A"};
 float Profile_5_Setpoints[3] = {90, 90, 0};
-float Profile_5_Timings[3] = {2, 2, 2};
+float Profile_5_Timings[3] = {3, 2, 3};
 
 ///////////////////////////
 //JOURNEY DATA STRUCTURE///
@@ -137,10 +128,9 @@ struct JOURNEY_CONFIGURATION {
 //Zone (default 0), Speed (default 0), Start_Time (default 0), Last_Speed (default 0)
 //Stages[] , Setpoints[], Timings[], Num_Stages, ACTIVE)
 
-JOURNEY_CONFIGURATION Journey_1 {"Motor_1_Direction", no_servo, APIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_1_Stages, Profile_1_Setpoints, Profile_1_Timings, false};
-JOURNEY_CONFIGURATION Journey_2 {"Motor_1_Direction", no_servo, BPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_2_Stages, Profile_2_Setpoints, Profile_2_Timings, false};
-JOURNEY_CONFIGURATION Journey_3 {"Servo", servo_1, DPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_4_Stages, Profile_4_Setpoints, Profile_4_Timings, false};
-JOURNEY_CONFIGURATION Journey_4 {"Servo", servo_2, DPIN2, 0, 0, 0, 12, 0, 0, 0, 0, Profile_5_Stages, Profile_5_Setpoints, Profile_5_Timings, false};
+JOURNEY_CONFIGURATION Journey_1 {"Motor_1_Direction", no_servo, APIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_1_Stages, Profile_1_Setpoints, Profile_1_Timings, false}; //Horse and Buggy
+JOURNEY_CONFIGURATION Journey_2 {"Motor_1_Direction", no_servo, BPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_2_Stages, Profile_2_Setpoints, Profile_2_Timings, false}; //Farm Train
+JOURNEY_CONFIGURATION Journey_3 {"Servo", servo_1, DPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_4_Stages, Profile_4_Setpoints, Profile_4_Timings, false}; //Forklift
 
 
 const int Num_Journeys = 4;
@@ -220,16 +210,6 @@ void loop() {
   //ANIMATION STAGE//
   ///////////////////
 
-  if (Journeys[0].ACTIVE == false and Journeys[1].ACTIVE == false and Journeys[2].ACTIVE == false and Journeys[3].ACTIVE == false) {
-    int rando = random(0, 4);
-    Journeys[rando].ACTIVE = true;
-    Journeys[rando].Zone = 0;
-    Journeys[rando].Last_Speed = 0;
-    Journeys[rando].Start_Time = long(millis());
-    Serial.println(rando);
-  }
-
-
   for (int J = 0; J < Num_Journeys; J++) {
     JOURNEY_CONFIGURATION &Journey = Journeys[J];
 
@@ -263,7 +243,6 @@ void next_stage(JOURNEY_CONFIGURATION &Journey) {
 
   //Restarting
   if (Journey.Zone == 3) {
-    Journey.ACTIVE = false;
     Journey.Zone = 0;
   }
 
