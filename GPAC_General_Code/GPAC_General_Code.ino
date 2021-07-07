@@ -96,7 +96,11 @@ float Profile_3_Timings[5] = {5, 5, 1};
 //Profile 4 (Angle Profile)
 String Profile_4_Stages[3] = {"A", "C", "A"};
 float Profile_4_Setpoints[3] = {90, 90, 0};
-float Profile_4_Timings[3] = {3.0, 2, 3.0};
+float Profile_4_Timings[3] = {2, 2, 2};
+
+String Profile_5_Stages[3] = {"A", "C", "A"};
+float Profile_5_Setpoints[3] = {90, 90, 0};
+float Profile_5_Timings[3] = {2, 2, 2};
 
 ///////////////////////////
 //JOURNEY DATA STRUCTURE///
@@ -135,10 +139,12 @@ struct JOURNEY_CONFIGURATION {
 
 JOURNEY_CONFIGURATION Journey_1 {"Motor_1_Direction", no_servo, APIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_1_Stages, Profile_1_Setpoints, Profile_1_Timings, false};
 JOURNEY_CONFIGURATION Journey_2 {"Motor_1_Direction", no_servo, BPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_2_Stages, Profile_2_Setpoints, Profile_2_Timings, false};
-JOURNEY_CONFIGURATION Journey_3 {"Motor_1_Direction", no_servo, BPIN2, 0, 0, 0, 12, 0, 0, 0, 0, Profile_3_Stages, Profile_3_Setpoints, Profile_3_Timings, false};
+JOURNEY_CONFIGURATION Journey_3 {"Servo", servo_1, DPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_4_Stages, Profile_4_Setpoints, Profile_4_Timings, false};
+JOURNEY_CONFIGURATION Journey_4 {"Servo", servo_2, DPIN2, 0, 0, 0, 12, 0, 0, 0, 0, Profile_5_Stages, Profile_5_Setpoints, Profile_5_Timings, false};
 
-const int Num_Journeys = 3;
-JOURNEY_CONFIGURATION Journeys[Num_Journeys] = {Journey_1, Journey_2, Journey_3};
+
+const int Num_Journeys = 4;
+JOURNEY_CONFIGURATION Journeys[Num_Journeys] = {Journey_1, Journey_2, Journey_3, Journey_4};
 
 void setup() {
 
@@ -157,9 +163,8 @@ void setup() {
   //Initializing PWM Pins
   pinMode(APIN1, OUTPUT);
   pinMode(APIN2, OUTPUT);
-
   pinMode(BPIN1, OUTPUT);
-  pinMode(BPIN2, OUTPUT);
+
 
   //Setting up serial monitor.
   Serial.begin(9600);
@@ -173,22 +178,23 @@ void setup() {
   /////////////////
 
   //Attaching Servos
-    for (int J = 0; J < Num_Journeys; J++) {
+  for (int J = 0; J < Num_Journeys; J++) {
     JOURNEY_CONFIGURATION &Journey = Journeys[J];
-    if (Journey.Device == "Servo"){
+    if (Journey.Device == "Servo") {
       Journey.servo.attach(Journey.PIN1);
     }
   }
 
-  //Holding in idle. 
+
+  //Holding in idle.
   //Startup();
 
   //Reseting start time.
   Reset_Start_Time();
- 
+
 }
 
-//Resting Start Times (On Startup)
+//Reseting Start Times (On Startup)
 void Reset_Start_Time() {
   //Setting Start Time For All Journeys
   for (int J = 0; J < Num_Journeys; J++) {
@@ -215,7 +221,7 @@ void loop() {
   ///////////////////
 
   if (Journeys[0].ACTIVE == false and Journeys[1].ACTIVE == false and Journeys[2].ACTIVE == false) {
-    int rando = random(0, 3);
+    int rando = random(0, 4);
     Journeys[rando].ACTIVE = true;
     Journeys[rando].Zone = 0;
     Journeys[rando].Last_Speed = 0;
@@ -243,7 +249,7 @@ void loop() {
 
       if (Journey.Device == "Servo") {
         servo_run(Journey);
-      } else if (Journey.Device = "Motor_1_Direction") {
+      } else if (Journey.Device == "Motor_1_Direction") {
         motor_run_1_direction(Journey);
       }
     }
