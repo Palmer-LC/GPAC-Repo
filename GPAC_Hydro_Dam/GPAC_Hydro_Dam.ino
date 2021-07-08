@@ -78,25 +78,31 @@ float PWM_resolution = 255;
 //MOTION PROFILES//
 ///////////////////
 
-//Profile 1 (Speed Profile) //Hy
-String Profile_1_Stages[5] = {"A", "C", "A"};
-float Profile_1_Setpoints[5] = {0.4, 0.4, 0};
-float Profile_1_Timings[5] = {3, 25, 2};
+//Profile 1 (Speed Profile) //Marble Machine
+String Profile_1_Stages[3] = {"A", "C", "A"};
+float Profile_1_Setpoints[3] = {0.75, 0.75, 0};
+float Profile_1_Timings[3] = {6, 25, 2};
 
-//Profile 2 (Speed Profile) //Farm Train
-String Profile_2_Stages[5] = {"A", "C", "A"};
-float Profile_2_Setpoints[5] = {0.45, 0.45, 0};
-float Profile_2_Timings[5] = {6, 25, 5};
+//Profile 2 (Speed Profile) //Moose-Rat Wheel
+String Profile_2_Stages[3] = {"A", "C", "A"};
+float Profile_2_Setpoints[3] = {0.75, 0.75, 0};
+float Profile_2_Timings[3] = {6, 25, 5};
 
-//Profile 4 (Angle Profile) //Grape Stompers
-String Profile_4_Stages[3] = {"A", "C", "A"};
-float Profile_4_Setpoints[3] = {25, 25, 0};
-float Profile_4_Timings[3] = {1, 1, 1};
+//Profile 3 (Speed Profile) //Bikers
+String Profile_3_Stages[3] = {"A", "C", "A"};
+float Profile_3_Setpoints[3] = {0.75, 0.75, 0};
+float Profile_3_Timings[3] = {6, 25, 2};
 
-//Profile 5 (Speed Profile) //Ventiliation Fan
-String Profile_5_Stages[1] = {"C"};
-float Profile_5_Setpoints[1] = {0.04};
-float Profile_5_Timings[1] = {0};
+//Profile 4 (Angle Profile) //Fans
+String Profile_4_Stages[1] = {"C"};
+float Profile_4_Setpoints[1] = {0.04};
+float Profile_4_Timings[1] = {0};
+
+//Profile 5 (Speed Profile) //Franken-Moose
+String Profile_5_Stages[3] = {"A", "C", "A"};
+float Profile_5_Setpoints[3] = {40, 40, 0}
+};
+float Profile_5_Timings[3] = {0};
 
 ///////////////////////////
 //JOURNEY DATA STRUCTURE///
@@ -134,15 +140,15 @@ struct JOURNEY_CONFIGURATION {
 //Zone (default 0), Speed (default 0), Start_Time (default 0), Last_Speed (default 0)
 //Stages[] , Setpoints[], Timings[], Num_Stages, ACTIVE)
 
-JOURNEY_CONFIGURATION Journey_1 {"Motor_1_Direction", no_servo, APIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_1_Stages, Profile_1_Setpoints, Profile_1_Timings, true,3}; //Horse and Buggy
-JOURNEY_CONFIGURATION Journey_2 {"Motor_1_Direction", no_servo, BPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_2_Stages, Profile_2_Setpoints, Profile_2_Timings, true,3}; //Farm Train
-JOURNEY_CONFIGURATION Journey_3 {"Servo", servo_1, DPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_3_Stages, Profile_3_Setpoints, Profile_3_Timings, true,4}; //Forklift
-JOURNEY_CONFIGURATION Journey_4 {"Servo", servo_2, DPIN2, 0, 0, 0, 12, 0, 0, 0, 0, Profile_3_Stages, Profile_4_Setpoints, Profile_4_Timings, true,3}; //Grape Stompers
-JOURNEY_CONFIGURATION Journey_5 {"Motor_1_Direction", no_servo, CPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_5_Stages, Profile_5_Setpoints, Profile_5_Timings, true,1}; //Fan
+JOURNEY_CONFIGURATION Journey_1 {"Motor_1_Direction", no_servo, APIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_1_Stages, Profile_1_Setpoints, Profile_1_Timings, false, 3}; //Marble-Machine
+JOURNEY_CONFIGURATION Journey_2 {"Motor_1_Direction", no_servo, APIN2, 0, 0, 0, 12, 0, 0, 0, 0, Profile_2_Stages, Profile_2_Setpoints, Profile_2_Timings, false, 3}; //Moose-Rat Wheel
+JOURNEY_CONFIGURATION Journey_3 {"Motor_1_Direction", no_servo, BPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_3_Stages, Profile_3_Setpoints, Profile_3_Timings, false, 3}; //Bikers
+JOURNEY_CONFIGURATION Journey_4 {"Motor_1_Direction", no_servo, BPIN2, 0, 0, 0, 12, 0, 0, 0, 0, Profile_4_Stages, Profile_4_Setpoints, Profile_4_Timings, false, 1}; //Fans
+JOURNEY_CONFIGURATION Journey_5 {"Servo", servo_1, DPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_5_Stages, Profile_5_Setpoints, Profile_5_Timings, false, 3}; //Franken-Moose
 
 
 const int Num_Journeys = 5;
-JOURNEY_CONFIGURATION Journeys[Num_Journeys] = {Journey_1, Journey_2, Journey_3,Journey_4, Journey_5};
+JOURNEY_CONFIGURATION Journeys[Num_Journeys] = {Journey_1, Journey_2, Journey_3, Journey_4, Journey_5};
 
 void setup() {
 
@@ -161,16 +167,16 @@ void setup() {
   //Initializing PWM Pins
   pinMode(APIN1, OUTPUT);
   pinMode(APIN2, OUTPUT);
-  digitalWrite(APIN2,LOW);
+  digitalWrite(APIN2, LOW);
 
   pinMode(BPIN1, OUTPUT);
   pinMode(BPIN2, OUTPUT);
-  digitalWrite(BPIN2,LOW);
+  digitalWrite(BPIN2, LOW);
 
 
   pinMode(CPIN1, OUTPUT);
   pinMode(CPIN2, OUTPUT);
-  digitalWrite(CPIN2,LOW);
+  digitalWrite(CPIN2, LOW);
 
   //Setting up serial monitor.
   Serial.begin(9600);
@@ -229,25 +235,25 @@ void loop() {
   for (int J = 0; J < Num_Journeys; J++) {
     JOURNEY_CONFIGURATION &Journey = Journeys[J];
 
-      long TIME = millis();
-      int zone = Journey.Zone;
-      long elapsed_time = TIME - Journey.Start_Time;
+    long TIME = millis();
+    int zone = Journey.Zone;
+    long elapsed_time = TIME - Journey.Start_Time;
 
-      if (Journey.Stages[zone] != "C") {
-        Journey.Speed = float(Journey.Last_Speed) + float(elapsed_time) * float(Journey.Profile_Setpoints[zone] - Journey.Last_Speed) / float(1000 * Journey.Profile_Timings[zone]);          
-        } else {
-           Journey.Speed = Journey.Profile_Setpoints[zone];
-        }
+    if (Journey.Stages[zone] != "C") {
+      Journey.Speed = float(Journey.Last_Speed) + float(elapsed_time) * float(Journey.Profile_Setpoints[zone] - Journey.Last_Speed) / float(1000 * Journey.Profile_Timings[zone]);
+    } else {
+      Journey.Speed = Journey.Profile_Setpoints[zone];
+    }
 
-      if (elapsed_time >= (Journey.Profile_Timings[zone] * 1000)) {
-        next_stage(Journey);
-      }
+    if (elapsed_time >= (Journey.Profile_Timings[zone] * 1000)) {
+      next_stage(Journey);
+    }
 
-      if (Journey.Device == "Servo") {
-        servo_run(Journey);
-      } else if (Journey.Device == "Motor_1_Direction") {
-        motor_run_1_direction(Journey);
-      }
+    if (Journey.Device == "Servo") {
+      servo_run(Journey);
+    } else if (Journey.Device == "Motor_1_Direction") {
+      motor_run_1_direction(Journey);
+    }
   }
 }
 
@@ -283,10 +289,10 @@ void motor_run_1_direction(JOURNEY_CONFIGURATION &Journey) {
 
   float limited_speed_ratio = voltage_limit * Journey.Speed;
 
-    if (Journey.PIN1 == CPIN1){
-    Serial.println("Pin: " + String(Journey.PIN1) + " Speed: " + String(Journey.Speed) + " Reso: " + String(PWM_resolution*Journey.Speed));
+  if (Journey.PIN1 == CPIN1) {
+    Serial.println("Pin: " + String(Journey.PIN1) + " Speed: " + String(Journey.Speed) + " Reso: " + String(PWM_resolution * Journey.Speed));
   }
-          
+
 
   analogWrite(Journey.PIN1, limited_speed_ratio * PWM_resolution);
 
