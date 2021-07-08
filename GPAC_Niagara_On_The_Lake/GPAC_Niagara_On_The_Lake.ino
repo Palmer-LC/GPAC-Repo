@@ -89,9 +89,9 @@ float Profile_2_Setpoints[5] = {0.45, 0.45, 0};
 float Profile_2_Timings[5] = {6, 25, 5};
 
 //Profile 3 (Angle Profile) //Forklift
-String Profile_3_Stages[3] = {"A", "C", "A","C"};
-float Profile_3_Setpoints[3] = {90, 90, 0, 0};
-float Profile_3_Timings[3] = {3, 2, 3, 2};
+String Profile_3_Stages[4] = {"A", "C", "A","C"};
+float Profile_3_Setpoints[4] = {90, 90, 0, 0};
+float Profile_3_Timings[4] = {3, 2, 3, 2};
 
 //Profile 4 (Angle Profile) //Grape Stompers
 String Profile_4_Stages[3] = {"A", "C", "A"};
@@ -101,7 +101,7 @@ float Profile_4_Timings[3] = {1, 1, 1};
 
 //Profile 5 (Speed Profile) //Vineyard Fan
 String Profile_5_Stages[1] = {"C"};
-float Profile_5_Setpoints[1] = {0.1};
+float Profile_5_Setpoints[1] = {0.04};
 float Profile_5_Timings[1] = {0};
 
 ///////////////////////////
@@ -289,7 +289,7 @@ void motor_run_1_direction(JOURNEY_CONFIGURATION &Journey) {
 
   float limited_speed_ratio = voltage_limit * Journey.Speed;
 
-    if (Journey.PIN1 == APIN1){
+    if (Journey.PIN1 == CPIN1){
     Serial.println("Pin: " + String(Journey.PIN1) + " Speed: " + String(Journey.Speed) + " Reso: " + String(PWM_resolution*Journey.Speed));
   }
           
