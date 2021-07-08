@@ -80,18 +80,18 @@ float PWM_resolution = 255;
 
 //Profile 1 (Speed Profile) //Horse and Buggy
 String Profile_1_Stages[5] = {"A", "C", "A"};
-float Profile_1_Setpoints[5] = {0.3, 0.3, 0};
-float Profile_1_Timings[5] = {4, 12, 2};
+float Profile_1_Setpoints[5] = {0.4, 0.4, 0};
+float Profile_1_Timings[5] = {3, 25, 2};
 
 //Profile 2 (Speed Profile) //Farm Train
 String Profile_2_Stages[5] = {"A", "C", "A"};
-float Profile_2_Setpoints[5] = {0.4, 0.4, 0};
+float Profile_2_Setpoints[5] = {0.45, 0.45, 0};
 float Profile_2_Timings[5] = {6, 25, 5};
 
 //Profile 3 (Angle Profile) //Forklift
-String Profile_3_Stages[3] = {"A", "C", "A"};
-float Profile_3_Setpoints[3] = {90, 90, 0};
-float Profile_3_Timings[3] = {3, 2, 3};
+String Profile_3_Stages[3] = {"A", "C", "A","C"};
+float Profile_3_Setpoints[3] = {90, 90, 0, 0};
+float Profile_3_Timings[3] = {3, 2, 3, 2};
 
 //Profile 4 (Angle Profile) //Grape Stompers
 String Profile_4_Stages[3] = {"A", "C", "A"};
@@ -142,7 +142,7 @@ struct JOURNEY_CONFIGURATION {
 
 JOURNEY_CONFIGURATION Journey_1 {"Motor_1_Direction", no_servo, APIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_1_Stages, Profile_1_Setpoints, Profile_1_Timings, true,3}; //Horse and Buggy
 JOURNEY_CONFIGURATION Journey_2 {"Motor_1_Direction", no_servo, BPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_2_Stages, Profile_2_Setpoints, Profile_2_Timings, true,3}; //Farm Train
-JOURNEY_CONFIGURATION Journey_3 {"Servo", servo_1, DPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_3_Stages, Profile_3_Setpoints, Profile_3_Timings, true,3}; //Forklift
+JOURNEY_CONFIGURATION Journey_3 {"Servo", servo_1, DPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_3_Stages, Profile_3_Setpoints, Profile_3_Timings, true,4}; //Forklift
 JOURNEY_CONFIGURATION Journey_4 {"Servo", servo_2, DPIN2, 0, 0, 0, 12, 0, 0, 0, 0, Profile_3_Stages, Profile_4_Setpoints, Profile_4_Timings, true,3}; //Grape Stompers
 JOURNEY_CONFIGURATION Journey_5 {"Motor_1_Direction", no_servo, CPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_5_Stages, Profile_5_Setpoints, Profile_5_Timings, true,1}; //Fan
 
