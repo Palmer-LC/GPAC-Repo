@@ -1,4 +1,4 @@
-//GPAC General Code
+//GPAC Hydro Dam: Fraken-Moose Animations (Servo, Lightning, Fans)
 //By: Palmer Insull, palmeri@little-canada.ca
 //Started: 7/6/2021
 
@@ -78,15 +78,15 @@ float PWM_resolution = 255;
 //MOTION PROFILES//
 ///////////////////
 
-//Profile 1 (Speed Profile) //Marble Machine
-String Profile_1_Stages[5] = {"A", "C", "A", "C", "A"};
-float Profile_1_Setpoints[5] = {0.8,0.8,0.4,0.4,0};
-float Profile_1_Timings[5] = {0.1,0.1,0.1, 12, 2};
+//Profile 1 (Speed Profile) //Fans
+String Profile_1_Stages[1] = {"C"};
+float Profile_1_Setpoints[1] = {0.3};
+float Profile_1_Timings[1] = {0};
 
-//Profile 2 (Speed Profile) //Moose-Rat Wheel
-String Profile_2_Stages[3] = {"A", "C", "A"};
-float Profile_2_Setpoints[3] = {0.4, 0.4, 0};
-float Profile_2_Timings[3] = {6, 7, 5};
+//Profile 2 (Speed Profile) //Relay For Lightning
+String Profile_2_Stages[2] = {"C", "C"};
+float Profile_2_Setpoints[2] = {0,0.5};
+float Profile_2_Timings[2] = {1,25};
 
 //Profile 3 (Speed Profile) //Bikers
 String Profile_3_Stages[3] = {"A", "C", "A"};
@@ -130,9 +130,9 @@ struct JOURNEY_CONFIGURATION {
 //Zone (default 0), Speed (default 0), Start_Time (default 0), Last_Speed (default 0)
 //Stages[] , Setpoints[], Timings[], Num_Stages, ACTIVE)
 
-JOURNEY_CONFIGURATION Journey_1 {"Motor_1_Direction", no_servo, APIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_1_Stages, Profile_1_Setpoints, Profile_1_Timings, true, true, 5}; //Marble-Machine
-JOURNEY_CONFIGURATION Journey_2 {"Motor_1_Direction", no_servo, BPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_2_Stages, Profile_2_Setpoints, Profile_2_Timings, true, true, 3}; //Moose-Rat Wheel
-JOURNEY_CONFIGURATION Journey_3 {"Motor_1_Direction", no_servo, CPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_3_Stages, Profile_3_Setpoints, Profile_3_Timings, true, true, 3}; //Bikers
+JOURNEY_CONFIGURATION Journey_1 {"Motor_1_Direction", no_servo, APIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_1_Stages, Profile_1_Setpoints, Profile_1_Timings, true, true, 1}; //Fans
+JOURNEY_CONFIGURATION Journey_2 {"Motor_1_Direction", no_servo, BPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_2_Stages, Profile_2_Setpoints, Profile_2_Timings, true, true, 2}; //Lightning
+JOURNEY_CONFIGURATION Journey_3 {"Servo", servo_1, DPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_3_Stages, Profile_3_Setpoints, Profile_3_Timings, true, true, 3}; //Servo
 
 const int Num_Journeys = 3;
 JOURNEY_CONFIGURATION Journeys[Num_Journeys] = {Journey_1, Journey_2, Journey_3};
@@ -160,11 +160,6 @@ void setup() {
   pinMode(BPIN2, OUTPUT);
   digitalWrite(BPIN2, LOW);
 
-
-  pinMode(CPIN1, OUTPUT);
-  pinMode(CPIN2, OUTPUT);
-  digitalWrite(CPIN2, LOW);
-
   //Setting up serial monitor.
   Serial.begin(9600);
 
@@ -189,7 +184,7 @@ void setup() {
 
   //Reseting start time.
   Reset_Start_Time();
-
+  
 }
 
 //Reseting Start Times (On Startup)
