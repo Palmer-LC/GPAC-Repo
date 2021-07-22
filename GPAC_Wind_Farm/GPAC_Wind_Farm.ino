@@ -1,6 +1,6 @@
-//GPAC General Code
+//Wind Farm
 //By: Palmer Insull, palmeri@little-canada.ca
-//Started: 7/6/2021
+//Started: 7/21/2021
 
 //Libraries
 
@@ -42,7 +42,6 @@ Servo servo_8;
 //An unused servo to accomdate the Struct initliazition...
 Servo no_servo;
 
-
 ////////////////////
 //TIME OF DAY CODE//
 ////////////////////
@@ -52,13 +51,6 @@ long show_time = 0;
 
 //Activation Profiles
 long Activation_Profile_1[2] = {5000, 25000};
-long Activation_Profile_2[2];
-long Activation_Profile_3[2];
-long Activation_Profile_4[2];
-long Activation_Profile_5[2];
-long Activation_Profile_6[2];
-long Activation_Profile_7[2];
-long Activation_Profile_8[2];
 
 ////////////////////////////////////////
 //DEFINE SUPPLY AND OPERATING VOLTAGES//
@@ -78,20 +70,18 @@ float PWM_resolution = 255;
 //MOTION PROFILES//
 ///////////////////
 
-//Profile 1 (Speed Profile) //Marble Machine
-String Profile_1_Stages[1] = {"C"};
-float Profile_1_Setpoints[1] = {0.2};
-float Profile_1_Timings[1] = {0};
+//Profile 1 (Speed Profile)
+String Profile_1_Stages[2] = {"C","C"};
+float Profile_1_Setpoints[2] = {0.3,0};
+float Profile_1_Timings[2] = {30,0};
 
-//Profile 2 (Speed Profile) //Moose-Rat Wheel
-String Profile_2_Stages[3] = {"A", "C", "A"};
-float Profile_2_Setpoints[3] = {0.4, 0.4, 0};
-float Profile_2_Timings[3] = {6, 7, 5};
+String Profile_2_Stages[2] = {"C","C"};
+float Profile_2_Setpoints[2] = {0.3,0};
+float Profile_2_Timings[2] = {0,30};
 
-//Profile 3 (Speed Profile) //Bikers
-String Profile_3_Stages[3] = {"A", "C", "A"};
-float Profile_3_Setpoints[3] = {0.8, 0.8, 0};
-float Profile_3_Timings[3] = {6, 15, 2};
+String Profile_3_Stages[2] = {"C","C"};
+float Profile_3_Setpoints[2] = {0.3,0};
+float Profile_3_Timings[2] = {0,15};
 
 ///////////////////////////
 //JOURNEY DATA STRUCTURE///
@@ -130,9 +120,10 @@ struct JOURNEY_CONFIGURATION {
 //Zone (default 0), Speed (default 0), Start_Time (default 0), Last_Speed (default 0)
 //Stages[] , Setpoints[], Timings[], Num_Stages, ACTIVE)
 
-JOURNEY_CONFIGURATION Journey_1 {"Motor_1_Direction", no_servo, APIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_1_Stages, Profile_1_Setpoints, Profile_1_Timings, true, true, 1}; //Marble-Machine
-JOURNEY_CONFIGURATION Journey_2 {"Motor_1_Direction", no_servo, BPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_2_Stages, Profile_2_Setpoints, Profile_2_Timings, true, true, 3}; //Moose-Rat Wheel
-JOURNEY_CONFIGURATION Journey_3 {"Motor_1_Direction", no_servo, CPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_3_Stages, Profile_3_Setpoints, Profile_3_Timings, true, true, 3}; //Bikers
+JOURNEY_CONFIGURATION Journey_1 {"Motor_1_Direction", no_servo, APIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_1_Stages, Profile_1_Setpoints, Profile_1_Timings, true, true, 2}; //Windmill Set 1
+JOURNEY_CONFIGURATION Journey_2 {"Motor_1_Direction", no_servo, BPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_2_Stages, Profile_2_Setpoints, Profile_2_Timings, true, true, 2}; //Windmill Set 2
+JOURNEY_CONFIGURATION Journey_3 {"Motor_1_Direction", no_servo, DPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_3_Stages, Profile_3_Setpoints, Profile_3_Timings, true, true, 2}; //Windmill Set 3
+
 
 const int Num_Journeys = 3;
 JOURNEY_CONFIGURATION Journeys[Num_Journeys] = {Journey_1, Journey_2, Journey_3};
@@ -159,18 +150,17 @@ void setup() {
   pinMode(BPIN1, OUTPUT);
   pinMode(BPIN2, OUTPUT);
   digitalWrite(BPIN2, LOW);
+  
+  //pinMode(CPIN1, OUTPUT);
+  //pinMode(CPIN2, OUTPUT);
+  //digitalWrite(CPIN2, LOW);
 
-
-  pinMode(CPIN1, OUTPUT);
-  pinMode(CPIN2, OUTPUT);
-  digitalWrite(CPIN2, LOW);
+  pinMode(DPIN1, OUTPUT);
+  pinMode(DPIN2, OUTPUT);
+  digitalWrite(DPIN2, LOW);
 
   //Setting up serial monitor.
   Serial.begin(9600);
-
-  ///////////////////
-  //STEPPER CONTROL//
-  ///////////////////
 
   /////////////////
   //SERVO CONTROL//
@@ -228,13 +218,10 @@ void loop() {
   }
   */
 
-  Serial.print("ACTIVE Journeys: ");
   for (int J = 0; J < Num_Journeys; J++) {
     JOURNEY_CONFIGURATION &Journey = Journeys[J];
 
    // if (Journey.ACTIVE) {
-
-      //Serial.print(String(J) + " ");
 
       long TIME = millis();
       int zone = Journey.Zone;
@@ -256,8 +243,8 @@ void loop() {
         motor_run_1_direction(Journey);
       }
     //}
+    
   }
-  //Serial.println();
 }
 
 void next_stage(JOURNEY_CONFIGURATION &Journey) {
@@ -296,7 +283,6 @@ void motor_run_1_direction(JOURNEY_CONFIGURATION &Journey) {
   float limited_speed_ratio = voltage_limit * Journey.Speed;
 
   analogWrite(Journey.PIN1, limited_speed_ratio * PWM_resolution);
-  Serial.println(limited_speed_ratio);
 
 }
 

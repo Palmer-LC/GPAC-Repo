@@ -85,13 +85,13 @@ float Profile_1_Timings[1] = {0};
 
 //Profile 2 (Speed Profile) //Relay For Lightning
 String Profile_2_Stages[2] = {"C", "C"};
-float Profile_2_Setpoints[2] = {0,0.5};
+float Profile_2_Setpoints[2] = {0.5,0};
 float Profile_2_Timings[2] = {1,25};
 
-//Profile 3 (Speed Profile) //Bikers
+//Profile 3 (Speed Profile) //Servo
 String Profile_3_Stages[3] = {"A", "C", "A"};
-float Profile_3_Setpoints[3] = {0.6, 0.6, 0};
-float Profile_3_Timings[3] = {6, 15, 2};
+float Profile_3_Setpoints[3] = {45, 45, 0};
+float Profile_3_Timings[3] = {1, 24, 1};
 
 ///////////////////////////
 //JOURNEY DATA STRUCTURE///
@@ -131,11 +131,12 @@ struct JOURNEY_CONFIGURATION {
 //Stages[] , Setpoints[], Timings[], Num_Stages, ACTIVE)
 
 JOURNEY_CONFIGURATION Journey_1 {"Motor_1_Direction", no_servo, APIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_1_Stages, Profile_1_Setpoints, Profile_1_Timings, true, true, 1}; //Fans
-JOURNEY_CONFIGURATION Journey_2 {"Motor_1_Direction", no_servo, BPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_2_Stages, Profile_2_Setpoints, Profile_2_Timings, true, true, 2}; //Lightning
-JOURNEY_CONFIGURATION Journey_3 {"Servo", servo_1, DPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_3_Stages, Profile_3_Setpoints, Profile_3_Timings, true, true, 3}; //Servo
+JOURNEY_CONFIGURATION Journey_2 {"Motor_1_Direction", no_servo, BPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_1_Stages, Profile_1_Setpoints, Profile_1_Timings, true, true, 1}; //Fans
+JOURNEY_CONFIGURATION Journey_3 {"Motor_1_Direction", no_servo, CPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_2_Stages, Profile_2_Setpoints, Profile_2_Timings, true, true, 2}; //Lightning
+JOURNEY_CONFIGURATION Journey_4 {"Servo", servo_1, DPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_3_Stages, Profile_3_Setpoints, Profile_3_Timings, true, true, 3}; //Servo
 
-const int Num_Journeys = 3;
-JOURNEY_CONFIGURATION Journeys[Num_Journeys] = {Journey_1, Journey_2, Journey_3};
+const int Num_Journeys = 4;
+JOURNEY_CONFIGURATION Journeys[Num_Journeys] = {Journey_1, Journey_2, Journey_3,Journey_4};
 
 void setup() {
 
@@ -159,6 +160,10 @@ void setup() {
   pinMode(BPIN1, OUTPUT);
   pinMode(BPIN2, OUTPUT);
   digitalWrite(BPIN2, LOW);
+
+  pinMode(CPIN1, OUTPUT);
+  pinMode(CPIN2, OUTPUT);
+  digitalWrite(CPIN2, LOW);  
 
   //Setting up serial monitor.
   Serial.begin(9600);
@@ -223,7 +228,6 @@ void loop() {
   }
   */
 
-  Serial.print("ACTIVE Journeys: ");
   for (int J = 0; J < Num_Journeys; J++) {
     JOURNEY_CONFIGURATION &Journey = Journeys[J];
 
@@ -291,7 +295,6 @@ void motor_run_1_direction(JOURNEY_CONFIGURATION &Journey) {
   float limited_speed_ratio = voltage_limit * Journey.Speed;
 
   analogWrite(Journey.PIN1, limited_speed_ratio * PWM_resolution);
-  Serial.println(limited_speed_ratio);
 
 }
 
@@ -318,4 +321,5 @@ void motor_run_2_direction(JOURNEY_CONFIGURATION &Journey) {
 
 void servo_run(JOURNEY_CONFIGURATION &Journey) {
   Journey.servo.write(Journey.Speed);
+  Serial.println("HELP");
 }

@@ -78,20 +78,31 @@ float PWM_resolution = 255;
 //MOTION PROFILES//
 ///////////////////
 
-//Profile 1 (Speed Profile) //Marble Machine
+//Profile 1 (Speed Profile)
 String Profile_1_Stages[1] = {"C"};
-float Profile_1_Setpoints[1] = {0.2};
+float Profile_1_Setpoints[1] = {0.5};
 float Profile_1_Timings[1] = {0};
 
-//Profile 2 (Speed Profile) //Moose-Rat Wheel
+//Profile 2 (Angle Profile)
 String Profile_2_Stages[3] = {"A", "C", "A"};
-float Profile_2_Setpoints[3] = {0.4, 0.4, 0};
-float Profile_2_Timings[3] = {6, 7, 5};
+float Profile_2_Setpoints[3] = {90, 90, 0};
+float Profile_2_Timings[3] = {3, 2, 1};
 
-//Profile 3 (Speed Profile) //Bikers
+//Profile 3 (Angle Profile)
 String Profile_3_Stages[3] = {"A", "C", "A"};
-float Profile_3_Setpoints[3] = {0.8, 0.8, 0};
-float Profile_3_Timings[3] = {6, 15, 2};
+float Profile_3_Setpoints[3] = {90, 90, 0};
+float Profile_3_Timings[3] = {3, 3, 1};
+
+//Profile 4 (Angle Profile)
+String Profile_4_Stages[3] = {"A", "C", "A"};
+float Profile_4_Setpoints[3] = {90, 90, 0};
+float Profile_4_Timings[3] = {3, 4, 1};
+
+//Profile 5 (Angle Profile)
+String Profile_5_Stages[3] = {"A", "C", "A"};
+float Profile_5_Setpoints[3] = {40, 40, 0};
+float Profile_5_Timings[3] = {2, 4, 2};
+
 
 ///////////////////////////
 //JOURNEY DATA STRUCTURE///
@@ -130,12 +141,15 @@ struct JOURNEY_CONFIGURATION {
 //Zone (default 0), Speed (default 0), Start_Time (default 0), Last_Speed (default 0)
 //Stages[] , Setpoints[], Timings[], Num_Stages, ACTIVE)
 
-JOURNEY_CONFIGURATION Journey_1 {"Motor_1_Direction", no_servo, APIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_1_Stages, Profile_1_Setpoints, Profile_1_Timings, true, true, 1}; //Marble-Machine
-JOURNEY_CONFIGURATION Journey_2 {"Motor_1_Direction", no_servo, BPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_2_Stages, Profile_2_Setpoints, Profile_2_Timings, true, true, 3}; //Moose-Rat Wheel
-JOURNEY_CONFIGURATION Journey_3 {"Motor_1_Direction", no_servo, CPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_3_Stages, Profile_3_Setpoints, Profile_3_Timings, true, true, 3}; //Bikers
+JOURNEY_CONFIGURATION Journey_1 {"Motor_1_Direction", no_servo, APIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_1_Stages, Profile_1_Setpoints, Profile_1_Timings, true, true, 1}; //Magnorail Hockey Player
+JOURNEY_CONFIGURATION Journey_2 {"Servo", servo_1, BPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_2_Stages, Profile_2_Setpoints, Profile_2_Timings, true, true, 3}; //Goalie
+JOURNEY_CONFIGURATION Journey_3 {"Servo", servo_2, BPIN2, 0, 0, 0, 12, 0, 0, 0, 0, Profile_3_Stages, Profile_3_Setpoints, Profile_3_Timings, true, true, 3}; //Shooter
+JOURNEY_CONFIGURATION Journey_4 {"Servo", servo_3, DPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_4_Stages, Profile_4_Setpoints, Profile_4_Timings, true, true, 3}; //Side
+JOURNEY_CONFIGURATION Journey_5 {"Servo", servo_4, DPIN2, 0, 0, 0, 12, 0, 0, 0, 0, Profile_5_Stages, Profile_5_Setpoints, Profile_5_Timings, true, true, 3}; //Dump-Truck
 
-const int Num_Journeys = 3;
-JOURNEY_CONFIGURATION Journeys[Num_Journeys] = {Journey_1, Journey_2, Journey_3};
+
+const int Num_Journeys = 5;
+JOURNEY_CONFIGURATION Journeys[Num_Journeys] = {Journey_1, Journey_2, Journey_3, Journey_4, Journey_5};
 
 void setup() {
 
