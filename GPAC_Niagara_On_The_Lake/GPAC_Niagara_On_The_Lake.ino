@@ -85,8 +85,8 @@ float Profile_1_Timings[5] = {3, 25, 2};
 
 //Profile 2 (Speed Profile) //Farm Train
 String Profile_2_Stages[5] = {"A", "C", "A"};
-float Profile_2_Setpoints[5] = {0.45, 0.45, 0};
-float Profile_2_Timings[5] = {6, 25, 5};
+float Profile_2_Setpoints[5] = {0.6, 0.6, 0};
+float Profile_2_Timings[5] = {6, 40, 5};
 
 //Profile 3 (Angle Profile) //Forklift
 String Profile_3_Stages[4] = {"A", "C", "A","C"};
@@ -289,11 +289,7 @@ void motor_run_1_direction(JOURNEY_CONFIGURATION &Journey) {
 
   float limited_speed_ratio = voltage_limit * Journey.Speed;
 
-    if (Journey.PIN1 == CPIN1){
-    Serial.println("Pin: " + String(Journey.PIN1) + " Speed: " + String(Journey.Speed) + " Reso: " + String(PWM_resolution*Journey.Speed));
-  }
-          
-
+  
   analogWrite(Journey.PIN1, limited_speed_ratio * PWM_resolution);
 
 }
