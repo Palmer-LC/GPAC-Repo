@@ -99,9 +99,9 @@ float Profile_4_Setpoints[3] = {90, 90, 0};
 float Profile_4_Timings[3] = {3, 4, 1};
 
 //Profile 5 (Angle Profile)
-String Profile_5_Stages[3] = {"A", "C", "A"};
-float Profile_5_Setpoints[3] = {40, 40, 0};
-float Profile_5_Timings[3] = {2, 4, 2};
+String Profile_5_Stages[4] = {"A", "C", "A", "C"};
+float Profile_5_Setpoints[4] = {50, 50, 10, 10};
+float Profile_5_Timings[4] = {2, 3, 2, 7};
 
 
 ///////////////////////////
@@ -145,7 +145,7 @@ JOURNEY_CONFIGURATION Journey_1 {"Motor_1_Direction", no_servo, APIN1, 0, 0, 0, 
 JOURNEY_CONFIGURATION Journey_2 {"Servo", servo_1, BPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_2_Stages, Profile_2_Setpoints, Profile_2_Timings, true, true, 3}; //Goalie
 JOURNEY_CONFIGURATION Journey_3 {"Servo", servo_2, BPIN2, 0, 0, 0, 12, 0, 0, 0, 0, Profile_3_Stages, Profile_3_Setpoints, Profile_3_Timings, true, true, 3}; //Shooter
 JOURNEY_CONFIGURATION Journey_4 {"Servo", servo_3, DPIN1, 0, 0, 0, 12, 0, 0, 0, 0, Profile_4_Stages, Profile_4_Setpoints, Profile_4_Timings, true, true, 3}; //Side
-JOURNEY_CONFIGURATION Journey_5 {"Servo", servo_4, DPIN2, 0, 0, 0, 12, 0, 0, 0, 0, Profile_5_Stages, Profile_5_Setpoints, Profile_5_Timings, true, true, 3}; //Dump-Truck
+JOURNEY_CONFIGURATION Journey_5 {"Servo", servo_4, DPIN2, 0, 0, 0, 12, 0, 0, 0, 0, Profile_5_Stages, Profile_5_Setpoints, Profile_5_Timings, true, true, 4}; //Dump-Truck
 
 
 const int Num_Journeys = 5;
