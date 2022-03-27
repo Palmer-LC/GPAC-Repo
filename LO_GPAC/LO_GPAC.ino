@@ -105,7 +105,7 @@ float Profile_2_Timings[5] = {0};
 
 //Profile 3 (Angle Profile) -- WEDDING HORAH
 String Profile_3_Stages[12] = {"A", "C", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"};
-float Profile_3_Setpoints[12] = {150, 150, 75, 110, 75, 110, 75, 110, 75, 110, 75, 150};
+float Profile_3_Setpoints[12] = {150, 150, 95, 120, 95, 120, 95, 120, 95, 120, 95, 150};
 float Profile_3_Timings[12] = {1.5, 2, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 1.5};
 
 ///////////////////////////
